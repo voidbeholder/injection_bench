@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Prompt injection на AgentDojo</title>
+<link rel="stylesheet" href="/style.css">
+</head>
+<body>
+<header>
+  <div>
+    <h1>Prompt injection: модели на AgentDojo</h1>
+    <p class="sub">Задачи, атаки и проверки — из бенчмарка AgentDojo (ETH Zurich). Проверка по состоянию среды, не по тексту ответа.</p>
+  </div>
+  <span id="key" class="badge"></span>
+</header>
+
+<main>
+  <section id="setup" class="card">
+    <h2>Запуск</h2>
+    <fieldset>
+      <legend>Модели</legend>
+      <div id="models"></div>
+      <input id="custom-model" type="text" placeholder="свой id модели OpenRouter (необязательно)">
+    </fieldset>
+    <fieldset>
+      <legend>Среда</legend>
+      <select id="suite"></select>
+    </fieldset>
+    <fieldset>
+      <legend>Атаки</legend>
+      <div id="attacks" class="scroll"></div>
+    </fieldset>
+    <fieldset>
+      <legend>Защиты</legend>
+      <div id="defenses"></div>
+    </fieldset>
+    <fieldset class="nums">
+      <legend>Выборка</legend>
+      <label>задач пользователя <input id="user-tasks" type="number" min="1" value="5"></label>
+      <label>задач атакующего <input id="injection-tasks" type="number" min="1" value="3"></label>
+      <label>seed <input id="seed" type="number" min="0" value="0"></label>
+    </fieldset>
+    <p id="plan" class="plan"></p>
+    <button id="run">Запустить</button>
+    <div id="progress" hidden>
+      <div class="bar"><div id="progress-fill"></div></div>
+      <p id="progress-text"></p>
+    </div>
+    <p id="error" class="error" hidden></p>
+    <p class="hint">Готовые эпизоды берутся из папки runs/ и повторно не оплачиваются.</p>
+  </section>
+
+  <section id="results" class="card">
+    <div class="row-head">
+      <h2>Результаты</h2>
+      <label class="history">прошлые запуски <select id="history"></select></label>
+    </div>
+    <div class="legend">
+      <span><i class="sw util"></i>utility — задача пользователя решена без атаки</span>
+      <span><i class="sw uatt"></i>utility под атакой</span>
+      <span><i class="sw asr"></i>ASR — цель атакующего достигнута</span>
+      <span><i class="sw doable"></i>атака выполнима — модель умеет сделать задачу атакующего, если попросить напрямую</span>
+    </div>
+    <div class="table-wrap"><table id="table">
+      <thead><tr><th>модель</th><th>защита</th><th>атака</th><th>utility</th><th>под атакой</th><th>ASR</th><th>атака выполнима</th></tr></thead>
+      <tbody></tbody>
+    </table></div>
+    <p id="empty" class="hint">Запустите прогон или выберите прошлый запуск. Клик по строке — эпизоды этой конфигурации.</p>
+  </section>
+
+  <section id="episodes" class="card">
+    <h2>Эпизоды <span id="ep-scope" class="scope"></span></h2>
+    <div id="tabs" class="tabs">
+      <button data-kind="showcase">для показа</button>
+      <button data-kind="">все</button>
+      <button data-kind="hijacked">атака удалась</button>
+      <button data-kind="resisted">атака не удалась</button>
+      <button data-kind="claimed">«готово» только на словах</button>
+      <button data-kind="benign">без атаки</button>
+    </div>
+    <div class="ep-grid">
+      <ul id="ep-list"></ul>
+      <div id="ep-detail"><p class="hint">Выберите эпизод слева.</p></div>
+    </div>
+  </section>
+</main>
+<script src="/app.js"></script>
+</body>
+</html>
